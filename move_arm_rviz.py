@@ -6,7 +6,16 @@ import math
 from time import sleep
 from copy import deepcopy
 
-goal_position = [0.0, 0.485, 0.2, -1.356, 1.0, 1.571, 0.085]
+h = 2
+
+if h == 1:
+ 
+	goal_position = [2.0, 0.485, 1.2, -1.356, 1.0, 1.571, 0.085]
+
+if h == 2:
+
+	goal_position = [0.0, -0.485, 0.0, -1.856, 0.0, 1.571, 0.785]
+
 
 move_group = moveit_commander.MoveGroupCommander("panda_arm")
 start_position = move_group.get_current_joint_values()
@@ -34,56 +43,52 @@ points.velocities = []
 points.accelerations = []
 points.effort = []
 points.time_from_start = rospy.Duration(1)
-msg.goal.trajectory.joint_trajectory.points.append(deepcopy(points))
+#msg.goal.trajectory.joint_trajectory.points.append(deepcopy(points))
 
 start_position = deepcopy(start_position)
 error_position = deepcopy(error_position)
 
-print(start_position)
-print(goal_position)
-print(error_position)
+position_array = []
 
+i = 0
+
+j = 0.002
+k = 0
+
+for c in range(1001):
+	
+	points.positions[i] = start_position[i] + k
+	position_array.insert(c,deepcopy(points.positions))
+	points.time_from_start = rospy.Duration(j)
+	msg.goal.trajectory.joint_trajectory.points.append(deepcopy(points))
+
+	j += 0.001		
+	k += error_position[i]/1000
+		
+	
+for i in range(1,7):
+
+	j = 0.002
+	k = 0
+	
+	for c in range(1001):
+		
+		points.positions = position_array[c]
+		points.positions[i] = start_position[i] + k
+		points.time_from_start = rospy.Duration(j)
+		msg.goal.trajectory.joint_trajectory.points[c] = deepcopy(points)
+		position_array[c] = deepcopy(points.positions)
+
+		j += 0.001		
+		k += error_position[i]/1000
+		
+	
 sleep(1)
 
-#for i in range(7):
-i=0
-
-k = 0.0
-	
-if (error_position[i] >= 0):
-
-	while points.positions[i] <= goal_position[i]:
-
-		points.positions.pop(i)
-
-		points.positions.insert(i, start_position[i] + k)	
-		msg.goal.trajectory.joint_trajectory.points.append(deepcopy(points))
-		
-		k += error_position[i]/1000
-
-		
-if (error_position[i] < 0):
-	
-	while points.positions[i] > goal_position[i]:
-
-		points.positions.pop(i)
-
-		points.positions.insert(i, start_position[i] + k)	
-		msg.goal.trajectory.joint_trajectory.points.append(deepcopy(points))
-		
-		k += error_position[i]/1000
-
-
 control_publisher.publish(msg)
-rospy.loginfo(msg)
+#rospy.loginfo(msg)
+ 			
 
-			
-print('_______________________________________________________')	
-print(points.positions[i])
-print(move_group.get_current_joint_values())
-print(start_position)
-print(goal_position)
-print(error_position)
 
 
 

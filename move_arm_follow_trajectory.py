@@ -1,7 +1,7 @@
 import rospy 
 from control_msgs.msg import FollowJointTrajectoryActionGoal
 from trajectory_msgs.msg import JointTrajectoryPoint
-import random
+import moveit_commander
 from time import sleep, time
 from math import pi
 from copy import deepcopy
@@ -21,22 +21,19 @@ msg.goal.trajectory.joint_names =    ['panda_joint1','panda_joint2','panda_joint
 
 point = JointTrajectoryPoint()
 
-point.positions = [0.3221649,-0.0646347,-0.0661049,-2.0278500,0.00455451,i,0.6986700]
+move_group = moveit_commander.MoveGroupCommander("panda_arm")
+start_position = move_group.get_current_joint_values()
+
+point.positions =  start_position
 point.velocities = []
 point.accelerations = []
 point.effort = []
-point.time_from_start = rospy.Duration(15)
+point.time_from_start = rospy.Duration(0)
 msg.goal.trajectory.points.append(deepcopy(point))
 
-i=pi
-
-while i>pi/2:
-
-	point.positions = [0.3221649,-0.0646347,-0.0661049,-2.0278500,0.00455451,i,0.6986700]	
-	msg.goal.trajectory.points.append(deepcopy(point))
-
-	i=i-0.001	 
-
+point.positions =  [0.0, -0.485, 0.0, -1.856, 0.0, 1.571, 0.785]	
+point.time_from_start = rospy.Duration(10)
+msg.goal.trajectory.points.append(deepcopy(point))
 
 sleep(1)
 
