@@ -6,16 +6,7 @@ import math
 from time import sleep
 from copy import deepcopy
 
-h = 2
-
-if h == 1:
- 
-	goal_position = [2.0, 0.485, 1.2, -1.356, 1.0, 1.571, 0.085]
-
-if h == 2:
-
-	goal_position = [0.0, -0.485, 0.0, -1.856, 0.0, 1.571, 0.785]
-
+goal_position = [1.0, 0.485, 1.0, -1.856, -1.0, 2.571, 0.785]
 
 move_group = moveit_commander.MoveGroupCommander("panda_arm")
 start_position = move_group.get_current_joint_values()
@@ -37,13 +28,15 @@ msg.goal.trajectory.joint_trajectory.header.stamp = rospy.Time.now()
 msg.goal.trajectory.joint_trajectory.header.frame_id = ''
 msg.goal.trajectory.joint_trajectory.joint_names = ['panda_joint1','panda_joint2','panda_joint3','panda_joint4','panda_joint5','panda_joint6','panda_joint7']
 
+n = 10
+t = 0.5
+
 points = JointTrajectoryPoint()
 points.positions = start_position
 points.velocities = []
 points.accelerations = []
 points.effort = []
-points.time_from_start = rospy.Duration(1)
-#msg.goal.trajectory.joint_trajectory.points.append(deepcopy(points))
+points.time_from_start = rospy.Duration(t)
 
 start_position = deepcopy(start_position)
 error_position = deepcopy(error_position)
@@ -52,7 +45,7 @@ position_array = []
 
 i = 0
 
-j = 0.002
+j = 2*t
 k = 0
 
 for c in range(1001):
@@ -62,13 +55,13 @@ for c in range(1001):
 	points.time_from_start = rospy.Duration(j)
 	msg.goal.trajectory.joint_trajectory.points.append(deepcopy(points))
 
-	j += 0.001		
-	k += error_position[i]/1000
+	j += t		
+	k += error_position[i]/n
 		
 	
 for i in range(1,7):
 
-	j = 0.002
+	j = 2*t
 	k = 0
 	
 	for c in range(1001):
@@ -79,8 +72,8 @@ for i in range(1,7):
 		msg.goal.trajectory.joint_trajectory.points[c] = deepcopy(points)
 		position_array[c] = deepcopy(points.positions)
 
-		j += 0.001		
-		k += error_position[i]/1000
+		j += t		
+		k += error_position[i]/n
 		
 	
 sleep(1)

@@ -25,14 +25,17 @@ move_group = moveit_commander.MoveGroupCommander("panda_arm")
 start_position = move_group.get_current_joint_values()
 
 point.positions =  start_position
-point.velocities = []
-point.accelerations = []
-point.effort = []
+point.velocities = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+point.accelerations = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+point.effort = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 point.time_from_start = rospy.Duration(0)
 msg.goal.trajectory.points.append(deepcopy(point))
 
-point.positions =  [0.0, -0.485, 0.0, -1.856, 0.0, 1.571, 0.785]	
-point.time_from_start = rospy.Duration(10)
+point.positions =  [0.0, -0.485, 0.0, -1.856, 0.0, 1.571, 0.785]
+point.velocities = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+point.accelerations = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+point.effort = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]	
+point.time_from_start = rospy.Duration(4)
 msg.goal.trajectory.points.append(deepcopy(point))
 
 sleep(1)
