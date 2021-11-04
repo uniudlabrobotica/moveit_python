@@ -37,7 +37,7 @@ def my_listener():
 	# np.save('q_p', np.asarray(q_p_m))
 	# np.save('tau', np.asarray(q_p_m))
 
-	#plt.plot(time_step_secs_m)
+	plt.plot(time_step_secs_m)
 	#plt.show()
 	#plt.plot(time_step_nsecs_m)
 	#plt.show()

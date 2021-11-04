@@ -31,11 +31,11 @@ point.effort = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 point.time_from_start = rospy.Duration(0)
 msg.goal.trajectory.points.append(deepcopy(point))
 
-point.positions =  [0.0, -0.485, 0.0, -1.856, 0.0, 1.571, 0.785]
+point.positions =  [0.0, -0.585, 0.0, -1.956, 0.0, 1.571, 0.785]
 point.velocities = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 point.accelerations = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 point.effort = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]	
-point.time_from_start = rospy.Duration(4)
+point.time_from_start = rospy.Duration(6)
 msg.goal.trajectory.points.append(deepcopy(point))
 
 sleep(1)
